@@ -1,12 +1,12 @@
 % input for 0
-input0 = [0,1,1,1,0,1,0,0,0,1,1,0,0,0,1,1,0,0,0,1,1,0,0,0,1,0,1,1,1,0];
+input0 = [0,1,1,1,0,1,0,0,0,1,1,0,0,0,1,1,0,0,0,1,1,0,0,0,1,0,1,1,1,0]';
 % input for 1
-input1 = [0,1,1,0,0,0,0,1,0,0,0,0,1,0,0,0,0,1,0,0,0,0,1,0,0,0,0,1,0,0];
+input1 = [0,1,1,0,0,0,0,1,0,0,0,0,1,0,0,0,0,1,0,0,0,0,1,0,0,0,0,1,0,0]';
 % input for 2
-input2 = [1,1,1,0,0,0,0,0,1,0,0,0,0,1,0,0,1,1,0,0,0,1,0,0,0,0,1,1,1,1];
+input2 = [1,1,1,0,0,0,0,0,1,0,0,0,0,1,0,0,1,1,0,0,0,1,0,0,0,0,1,1,1,1]';
 %output matrix 
 output_matrix = [1,0,0;0,1,0;0,0,1];
-input_matrix = [a,b,c];
+input_matrix = [input0,input1,input2];
 % create the perceptron
 number_identifier = PerceptronLayer(30,3,"hardlim");
 number_identifier = number_identifier.input_setter(input_matrix);
