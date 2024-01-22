@@ -24,6 +24,18 @@ classdef PerceptronLayer
             end
             obj.transfer = funcName;
         end
+
+        function output = errorLoss(obj,a,t)
+            if size(a,2) ~= 1 || size(t,2) ~= 1
+                disp("err:expect a vector");
+                return;
+            elseif size(a,1) ~= size(t,1)
+                disp("err: dimension of a and t does not match ");
+                return;
+            end
+            output = t - a;
+        end
+
 % this function let the perceptron learn about the weights and set the
 % highest iteration to 1000
 function output = learn(obj,input_set,output_set)
