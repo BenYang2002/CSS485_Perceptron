@@ -10,8 +10,8 @@ input_matrix = [input0,input1,input2];
 % create the perceptron
 init_weight_zeros = zeros(3,30);
 init_weight_bias = zeros(3,1);
-number_identifier = PerceptronLayer(init_weight_zeros,init_weight_bias,"hardlim");
-%number_identifier = PerceptronLayer(30,3,"hardlim");
+%number_identifier = PerceptronLayer(init_weight_zeros,init_weight_bias,"hardlim");
+number_identifier = PerceptronLayer(30,3,"hardlim");
 number_identifier = number_identifier.input_setter(input_matrix);
 number_identifier = number_identifier.output_setter(output_matrix);
 number_identifier = number_identifier.learn2();
@@ -56,9 +56,10 @@ for j = 1 : 4
     accuracy3 = [accuracy3,correct_times(3)/test_size];
 end
 flip_num = [2,4,6,8];
-plot(flip_num, accuracy1, 'o-');
+plot(flip_num, accuracy1, "o-","DisplayName","0 pattern");
 hold on;
-plot(flip_num, accuracy2, 'o-');
+plot(flip_num, accuracy2, "o-","DisplayName","1 pattern");
 hold on;
-plot(flip_num, accuracy3, 'o-');
+plot(flip_num, accuracy3, "o-","DisplayName","2 pattern");
+legend("show");
 hold off;
