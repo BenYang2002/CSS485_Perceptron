@@ -99,10 +99,7 @@ classdef PerceptronLayer
             obj.bias = obj.bias + error;
 
             % update weight matrix
-            fix_matrix = [];
-            for i = 1:length(error)
-                fix_matrix = [fix_matrix ; (obj.input_vector * error(i))' ];
-            end
+            fix_matrix = (obj.input_vector * error')';
             obj.weight_matrix = obj.weight_matrix + fix_matrix;
         end
         
@@ -178,6 +175,7 @@ classdef PerceptronLayer
         end
         
         % forward using matrix * vector
+        % forward can also take a matrix input
         function output = forward1(obj,input)
             netinput = obj.weight_matrix * input + obj.bias;
             if strcmp(obj.transfer, "hardlim")
