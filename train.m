@@ -23,12 +23,21 @@ t7 = 1;
 p8 = [4, 2];
 t8 = 1;
 
-patterns = [p1; p2; p3; p4; p5; p6; p7; p8];
-targets = [t1; t2; t3; t4; t5; t6; t7; t8];
+patterns = [p1]';
+targets = [t1];
 
 %Initialize a PerceptronLayer neural network 
-perceptron = PerceptronLayer(2, 1, 0.1);
-trainPerceptron(perceptron, patterns, targets)
+perceptron = PerceptronLayer(1, 2, "hardlim");
+
+%print perceptron weight and bias
+
+%print patterns and training set
+disp("Patterns")
+disp(patterns)
+disp("Targets")
+disp(targets)
+trainPerceptron(perceptron, patterns, targets);
+testPerceptron(perceptron, patterns, targets);
 
 
 %this function initializes and trains a PerceptronLayer neural network to classify two-dimensional vectors according to the training set provided
@@ -42,5 +51,23 @@ function trainPerceptron(perceptron, patterns, targets)
 
     %train the neural network
     perceptron.learn(patterns, targets);
+end
+
+function testPerceptron(perceptron, patterns, targets)
+    %initialize the neural network
+    arguments
+        perceptron PerceptronLayer
+        patterns double
+        targets double
+    end
+
+    %test the neural network by calling forward and comparing the output (a) to the target
+    for i = 1:size(patterns, 1)
+        a = perceptron.forward(patterns(i, :));
+        %assert that the output is equal to the target
+        assert(a == targets(i), "Test failed!");
+    end
+    fprintf("Successful!");
+    
 end
 

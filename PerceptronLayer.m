@@ -177,11 +177,11 @@ classdef PerceptronLayer
         % forward using matrix * vector
         % forward can also take a matrix input
         function output = forward1(obj,input)
-            netinput = obj.weight_matrix * input + obj.bias;
+            netinput = obj.weight_matrix * input' + obj.bias;
             if strcmp(obj.transfer, "hardlim")
-                output = hardlim(netinput);
+                output = obj.hardlim(netinput);
             else
-                output = hardlims(netinput);
+                output = obj.hardlims(netinput);
             end
         end
 
@@ -195,9 +195,9 @@ classdef PerceptronLayer
                 ithNeuron = obj.weight_matrix(i,:) * inVec + biasVec(i);
                 output = 0;
                 if strcmp(obj.transfer, "hardlim")
-                    output = hardlim(ithNeuron);
+                    output = obj.hardlim(ithNeuron);
                 else
-                    output = hardlims(ithNeuron);
+                    output = obj.hardlims(ithNeuron);
                 end
                 outputVec = [outputVec,output];
             end
