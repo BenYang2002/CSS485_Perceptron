@@ -1,0 +1,65 @@
+% input for 0
+input0 = [-1,1,1,1,-1,1,-1,-1,-1,1,1,-1,-1,-1,1,1,-1,-1,-1,1,1,-1,-1,-1,1,-1,1,1,1,-1]';
+% input for 1
+input1 = [-1,1,1,-1,-1,-1,-1,1,-1,-1,-1,-1,1,-1,-1,-1,-1,1,-1,-1,-1,-1,1,-1,-1,-1,-1,1,-1,-1]';
+% input for 2
+input2 = [1,1,1,-1,-1,-1,-1,-1,1,-1,-1,-1,-1,1,-1,-1,1,1,-1,-1,-1,1,-1,-1,-1,-1,1,1,1,1]';
+%output matrix 
+output_matrix = [1,0,0;0,1,0;0,0,1];
+input_matrix = [input0,input1,input2];
+% create the perceptron
+init_weight_zeros = zeros(3,30);
+init_weight_bias = zeros(3,1);
+%number_identifier = PerceptronLayer(init_weight_zeros,init_weight_bias,"hardlim");
+number_identifier = PerceptronLayer(30,3,"hardlim");
+number_identifier = number_identifier.input_setter(input_matrix);
+number_identifier = number_identifier.output_setter(output_matrix);
+number_identifier = number_identifier.learn();
+disp("weight matrix");
+neuron1 = reshape(number_identifier.weight_matrix(1,:),5,6);
+neuron2 = reshape(number_identifier.weight_matrix(2,:),5,6);
+neuron3 = reshape(number_identifier.weight_matrix(3,:),5,6);
+disp("weight for neuron1");
+disp(neuron1);
+disp("weight for neuron2");
+disp(neuron2);
+disp("weight for neuron3");
+disp(neuron3);
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%part2%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+accuracy1 = [];
+accuracy2 = [];
+accuracy3 = [];
+for j = 1 : 4  
+    % this vector keep track of the correct times for three kinds of input
+    correct_times = [0,0,0];
+    flip_input = zeros(30,3);
+    prediction = zeros(3,3);
+    test_size = 1000;
+    for i = 1 : test_size
+        for k = 1:3
+            filp_input(:,k) = addNoise(input_matrix(:,k),2 * j);
+            prediction(:,k) = number_identifier.forward(filp_input(:,k));
+            error = number_identifier.errorLoss(prediction(:,k),output_matrix(:,k));
+            if all(error == 0)
+                correct_times(k) = correct_times(k) + 1;
+            end
+        end
+    end
+    disp("correct rate for flip " + 2 * j + " pixels for pattern 0 is: " + correct_times(1)/test_size);
+    disp("correct rate for flip " + 2 * j + " pixels for pattern 1 is: " + correct_times(2)/test_size);
+    disp("correct rate for flip " + 2 * j + " pixels for pattern 2 is: " + correct_times(3)/test_size);
+    disp(" ");
+    accuracy1 = [accuracy1,correct_times(1)/test_size];
+    accuracy2 = [accuracy2,correct_times(2)/test_size];
+    accuracy3 = [accuracy3,correct_times(3)/test_size];
+end
+flip_num = [2,4,6,8];
+plot(flip_num, accuracy1, "o-","DisplayName","0 pattern");
+hold on;
+plot(flip_num, accuracy2, "o-","DisplayName","1 pattern");
+hold on;
+plot(flip_num, accuracy3, "o-","DisplayName","2 pattern");
+legend("show");
+hold off;
