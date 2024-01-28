@@ -132,28 +132,20 @@ classdef PerceptronLayer
         function output = forward(obj,input)
             netinput = obj.weight_matrix * input + obj.bias;
             if strcmp(obj.transfer, "hardlim")
-                output = hardlim(netinput);
+                output = obj.hardlim(netinput);
             else
-                output = hardlims(netinput);
+                output = obj.hardlims(netinput);
             end
         end
     end
         methods (Access = private) % set private
             %hardlim transformation func
-            function result = hardlim(netInput)
-                if netInput < 0
-                    result = 0;
-                else
-                    result = 1;
-                end
+            function result = hardlim(obj,netInput)
+                result = netInput() >= 0 
             end
             %hardlims transformation func
-            function result = hardlims(netInput)
-                if netInput < 0
-                    result = -1;
-                else
-                    result = 1;
-                end
+            function result = hardlims(obj,netInput)
+                result = 2 * ( netInput() >= 0 ) - 1;
             end
         end
     end
