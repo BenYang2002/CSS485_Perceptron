@@ -23,11 +23,13 @@ t7 = 1;
 p8 = [4, 2];
 t8 = 1;
 
-patterns = [p1; p2; p3; p4; p5; p6; p7; p8];
+patterns = [p1; p2; p3; p4; p5; p6; p7; p8]';
 targets = [t1; t2; t3; t4; t5; t6; t7; t8];
 
 %Initialize a PerceptronLayer neural network 
-perceptron = PerceptronLayer(2, 1, 0.1);
+perceptron = PerceptronLayer(2, 1, "hardlim");
+perceptron = perceptron.input_setter(patterns);
+perceptron = perceptron.output_setter(targets');
 trainPerceptron(perceptron, patterns, targets);
 testPerceptron(perceptron, patterns, targets);
 
@@ -41,7 +43,7 @@ function trainPerceptron(perceptron, patterns, targets)
     end
 
     %train the neural network
-    perceptron.learn(patterns, targets);
+    perceptron.learn();
 end
 
 function testPerceptron(perceptron, patterns, targets)
@@ -54,11 +56,10 @@ function testPerceptron(perceptron, patterns, targets)
 
     %test the neural network by calling forward and comparing the output (a) to the target
     for i = 1:size(patterns, 1)
-        a = perceptron.forward(patterns(i, :));
+        a = perceptron.forward(patterns(:, i));
         %assert that the output is equal to the target
         assert(a == targets(i), "Test failed!");
     end
     fprintf("Successful!");
     
 end
-
