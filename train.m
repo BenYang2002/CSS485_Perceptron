@@ -27,7 +27,7 @@ patterns = [p1]';
 targets = [t1];
 
 %Initialize a PerceptronLayer neural network 
-perceptron = PerceptronLayer(1, 2, "hardlim");
+perceptron = PerceptronLayer(2, 1, "hardlim");
 
 %print perceptron weight and bias
 
@@ -50,7 +50,9 @@ function trainPerceptron(perceptron, patterns, targets)
     end
 
     %train the neural network
-    perceptron.learn(patterns, targets);
+    perceptron = perceptron.input_setter(patterns);
+    perceptron = perceptron.output_setter(targets);
+    perceptron.learn();
 end
 
 function testPerceptron(perceptron, patterns, targets)
@@ -62,12 +64,11 @@ function testPerceptron(perceptron, patterns, targets)
     end
 
     %test the neural network by calling forward and comparing the output (a) to the target
-    for i = 1:size(patterns, 1)
-        a = perceptron.forward(patterns(i, :));
+    for i = 1:size(patterns, 2)
+        a = perceptron.forward(patterns(:, i));
         %assert that the output is equal to the target
         assert(a == targets(i), "Test failed!");
     end
     fprintf("Successful!");
     
 end
-
