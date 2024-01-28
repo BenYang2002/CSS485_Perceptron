@@ -30,11 +30,11 @@ targets = [t1; t2; t3; t4; t5; t6; t7; t8];
 perceptron = PerceptronLayer(2, 1, "hardlim");
 perceptron = perceptron.input_setter(patterns);
 perceptron = perceptron.output_setter(targets');
-trainPerceptron(perceptron, patterns, targets);
+perceptron = trainPerceptron(perceptron, patterns, targets);
 testPerceptron(perceptron, patterns, targets);
 
 %this function initializes and trains a PerceptronLayer neural network to classify two-dimensional vectors according to the training set provided
-function trainPerceptron(perceptron, patterns, targets)
+function perceptron = trainPerceptron(perceptron, patterns, targets)
     %initialize the neural network
     arguments
         perceptron PerceptronLayer
@@ -43,7 +43,7 @@ function trainPerceptron(perceptron, patterns, targets)
     end
 
     %train the neural network
-    perceptron.learn();
+    perceptron = perceptron.learn();
 end
 
 function testPerceptron(perceptron, patterns, targets)
