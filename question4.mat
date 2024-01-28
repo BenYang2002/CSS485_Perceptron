@@ -14,7 +14,7 @@ init_weight_bias = zeros(3,1);
 number_identifier = PerceptronLayer(30,3,"hardlim");
 number_identifier = number_identifier.input_setter(input_matrix);
 number_identifier = number_identifier.output_setter(output_matrix);
-number_identifier = number_identifier.learn2();
+number_identifier = number_identifier.learn();
 disp("weight matrix");
 neuron1 = reshape(number_identifier.weight_matrix(1,:),5,6);
 neuron2 = reshape(number_identifier.weight_matrix(2,:),5,6);
@@ -40,7 +40,7 @@ for j = 1 : 4
     for i = 1 : test_size
         for k = 1:3
             filp_input(:,k) = addNoise(input_matrix(:,k),2 * j);
-            prediction(:,k) = number_identifier.forward1(filp_input(:,k));
+            prediction(:,k) = number_identifier.forward(filp_input(:,k));
             error = number_identifier.errorLoss(prediction(:,k),output_matrix(:,k));
             if all(error == 0)
                 correct_times(k) = correct_times(k) + 1;
