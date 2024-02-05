@@ -25,28 +25,38 @@ input_matrix = [input0,input1,input2,input3,input4,input5];
 
 % train
 layer = SupervisedHebbianLayer(30,30,"linear");
-for pattern_num = 2 : size(input_matrix,2)
-    layer = layer.setInputMatrix(input_matrix(:,1 : pattern_num));
-    layer = layer.setOutputMatrix(output_matrix(:,1 : pattern_num));
+test_size = 100;
+flip_number = 3;
+correct_times = zeros(flip_number, size(input_matrix,2) - 1);
+correct_rate = zeros(flip_number, size(input_matrix,2) - 1);
+for digit_num = 2 : size(input_matrix,2)
+    layer = layer.setInputMatrix(input_matrix(:,1 : digit_num));
+    layer = layer.setOutputMatrix(output_matrix(:,1 : digit_num));
     %layer = layer.hebbRule();
     layer = layer.pseudoInverse();
-    test_size = 100;
-    correct_times = zeros(1, pattern_num);
-    for j = 1 : 3  % 2 * j is the number of fliped bytes
+    for j = 1 : flip_number  % 2 * j is the number of fliped bytes
         for i = 1 : test_size
-            for k = 1:pattern_num
+            for k = 1 : digit_num
                 noiseInput = addNoise(input_matrix(:,k),2 * j);
                 prediction = round(layer.forward(noiseInput));
                 if isequal(output_matrix(:,k),prediction)
-                    correct_times(k) = correct_times(k) + 1;
+                    correct_times(j,digit_num - 1) = correct_times(j,digit_num - 1) + 1;
                 end
             end
         end
         disp("number of fliped bits " + 2 * j);
-        for k = 1:pattern_num
-            disp("correct rate for pattern " + k + " is");
-            disp(correct_times(k));
-        end
-        correct_times = zeros(1, pattern_num);
+        correct_rate(j,digit_num - 1) = correct_times(j,digit_num - 1) / (test_size * digit_num);
+        disp("correct rate after storing " + k + " digits with " + j + " digits fliped is");
+        disp(correct_rate(j,digit_num-1));
     end
 end
+
+% plot
+flip_num = [2,4,6];
+digitNum = [2,3,4,5,6];
+for i = 1 : size(flip_num,2)
+    plot(digitNum, correct_rate(i,:), "o-","DisplayName",i + " digits");
+    hold on;
+end
+legend("show");
+hold off;
