@@ -1,0 +1,68 @@
+classdef SupervisedHebbianLayer
+    properties
+        weight_matrix
+
+        %name of the activation function
+        transfer    
+
+        % the whole input set
+        input_matrix
+
+        %the whole standard/correct output
+        output_matrix
+    end
+
+    methods
+        function obj = SupervisedHebbianLayer(weight,weight_width,funcName)
+            div1 = size(weight);
+            div2 = size(weight_width);
+            if div1(1) == 1 & div1(2) == 1 & div2(1) == 1 & div2(2) == 1
+                obj.weight_matrix = 2 * rand(weight_width,weight) - 1;
+            else 
+                obj.weight_matrix = weight;
+            end
+            obj.transfer = funcName;
+        end
+
+        % forward using matrix * vector
+        % forward can also take a matrix input
+        function output = forward(obj,input)
+            netinput = obj.weight_matrix * input;
+            if strcmp(obj.transfer, "linear")
+                output = obj.linear(netinput);
+            else
+                error("func name" + obj.transfer + " not found");
+            end
+        end
+
+        function output = linear(obj,netInput)
+            output = netInput;
+        end
+
+        function obj = setInputMatrix(obj,inputMatrix)
+            obj.input_matrix = inputMatrix;
+        end
+
+        function obj = setOutputMatrix(obj,outputMatrix)
+            obj.output_matrix = outputMatrix;
+        end
+        
+        function obj = hebbRule(obj)
+            obj.weight_matrix = obj.output_matrix * obj.input_matrix';
+        end
+
+        function obj = pseudoInverse(obj)
+            if size(obj.input_matrix,1) < size(obj.input_matrix,2)
+                error("row number is smaller than column, cannot use pseudoInverse. Aborted");
+                return;
+            end
+            if rank(obj.input_matrix) ~= size(obj.input_matrix,2)
+                error("columns are not independent, cannot use pseudoInverse. Aborted");
+                return;
+            end
+            pPlus = inv(obj.input_matrix' * obj.input_matrix)*obj.input_matrix';
+            obj.weight_matrix = obj.output_matrix * pPlus;
+        end
+
+    end
+end
